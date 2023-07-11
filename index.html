@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap"
+      rel="stylesheet"
+    />
+    <title>Register Form</title>
+    <style>
+      * {
+        font-family: "Roboto", sans-serif;
+      }
+      h1 {
+        color: #845f20;
+        font: 700;
+        font-size: clamp(4rem, 1.52rem, 1.8rem);
+      }
+      .page {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .form {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        justify-content: start;
+        width: 40%;
+        height: 80%;
+      }
+      label {
+        width: 40%;
+        font-size: clamp(1rem, 1.01rem, 1.2rem);
+      }
+      #registerForm {
+        width: 100%;
+      }
+      .input-section {
+        display: flex;
+        margin: 18px 0;
+        font-size: clamp(1rem, 1.01rem, 1.2rem);
+      }
+      input,
+      textarea {
+        width: 60%;
+        border-radius: 18px;
+        outline: none;
+        border: solid 1px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        padding: 6px 12px;
+        font-size: clamp(1rem, 1.01rem, 1.2rem);
+      }
+      .button-section {
+        display: flex;
+        justify-content: end;
+      }
+      .button-group {
+        width: 60%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      button {
+        margin: 12px;
+        padding: 12px;
+        background: linear-gradient(to top, #fcf1cf, #fefbf4);
+        border: 1px solid #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        border-radius: 12px;
+        width: 30%;
+        color: #845f20;
+        font-size: clamp(1.2rem, 1.18rem, 1.4rem);
+        font: 700;
+        cursor: pointer;
+      }
+      button:hover {
+        filter: brightness(90%);
+      }
+      span {
+        color: red;
+      }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <div class="page">
+      <div class="form">
+        <h1>Register</h1>
+        <p>
+          For any purchase enquiry, please complete the form below then click
+          submit button for registering. We will contact you as soon as
+          possible.
+        </p>
+        <form id="registerForm">
+          <div class="input-section">
+            <label>Full Name <span>*</span></label>
+            <input type="text" required name="fullName" />
+          </div>
+          <div class="input-section">
+            <label>E-mail <span>*</span></label>
+            <input type="email" required name="email" />
+          </div>
+          <div class="input-section">
+            <label>Phone <span>*</span></label>
+            <input type="tel" required name="phone" pattern="[0-9]{10,12}" />
+          </div>
+          <div class="input-section">
+            <label>Title <span>*</span></label>
+            <input type="text" required name="title" />
+          </div>
+          <div class="input-section">
+            <label>Comment <span>*</span></label>
+            <textarea cols="70" rows="5" name="comment"></textarea>
+          </div>
+          <div class="button-section">
+            <div class="button-group">
+              <button type="submit">Submit</button>
+              <button type="reset">Reset</button>
+            </div>
+          </div>
+        </form>
+        <label>Ajax call here</label>
+      </div>
+    </div>
+    <script>
+      $(document).ready(function() {
+        $('#registerForm').submit(function(event) {
+          event.preventDefault();
+
+          const fullName = $('[name="fullName"]').val();
+          const email = $('[name="email"]').val();
+          const phone = $('[name="phone"]').val();
+          const title = $('[name="title"]').val();
+          const comment = $('[name="comment"]').val();
+
+          if (!fullName || !email || !phone || !title) {
+            alert('Please fill in all required fields.');
+            return;
+          }
+
+          const phoneRegex = /^[0-9]{10,12}$/;
+          if (!phoneRegex.test(phone)) {
+            alert('Please enter a valid phone number.');
+            return;
+          }
+
+          const formData = {
+            fullName,
+            email,
+            phone,
+            title,
+            comment,
+          };
+
+          $.ajax({
+            url: '/submit-form',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function() {
+              alert('Submitted successfully!');
+              $('#registerForm')[0].reset();
+            },
+            error: function() {
+              alert('Error!');
+            },
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
